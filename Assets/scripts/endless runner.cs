@@ -12,7 +12,7 @@ public class EndlessRunner : MonoBehaviour
     Vector3 velocity = Vector3.zero;
     Vector3 acceleration = Vector3.zero;
 
-    float tmax = 1.667f; // tijdsduur van jump-animatie
+    float tmax = 0.867f; // tijdsduur van jump-animatie
     float t = 0;
 
     void Start()
@@ -46,10 +46,6 @@ public class EndlessRunner : MonoBehaviour
 
                 if (t > tmax)
                 {
-                    // Reset naar grondniveau (Y=0 bijvoorbeeld)
-                    var pos = transform.position;
-                    pos.y = 0;
-                    transform.position = pos;
 
                     myState = State.running;
                     animator.Play("run");
