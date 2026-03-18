@@ -1,49 +1,31 @@
 using UnityEngine;
 
-public class JumpController : MonoBehaviour
+public class Jump : MonoBehaviour
 {
-    public Animator anim;
+    private QuadraticFunction quadratic;
 
-    [Header("Jump Parameters")]
-    public float g = -10f;   // zwaartekracht
-    public float v0 = 9f;    // beginsnelheid
-    public float h0 = -3f;   // beginhoogte
-
-    [Header("Animation Data")]
-    public float animationTime = 0.75f;   // tijd van de spronganimatie
-
-    private float jumpTime;  // berekende sprongduur
-
-    private void Start()
+    void Awake()
     {
-        // De quadratic functie van de sprong
-        QuadraticFunction f = new QuadraticFunction(
-            -0.5f * g,
-            v0,
-            h0
-        );
+        // Get the QuadraticFunction component from the same GameObject
+        quadratic = GetComponent<QuadraticFunction>();
 
-        // Vind nulpunten
-        Vector2 roots = f.FindZero();
-
-        // Grootste is de totale sprongduur
-        jumpTime = Mathf.Max(roots.x, roots.y);
-
-        Debug.Log("Sprongduur = " + jumpTime + " seconden");
-
-        // Animatiesnelheid
-        float speed = animationTime / jumpTime;
-        anim.speed = speed;
-
-        Debug.Log("Animation speed ingesteld op: " + speed);
-    }
-
-    private void Update()
-    {
-        // Druk op spatie om de sprong te spelen
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (quadratic == null)
         {
-            anim.Play("Jump", 0, 0f); 
+            Debug.LogError("QuadraticFunction component missing!");
         }
     }
+
+    void Start()
+{
+    quadratic.a = -4f;
+    quadratic.b = 8f;
+    quadratic.c = 0f;
+
+    float valueAt1 = quadratic.EvaluateValue(1f);
+    Vector2 zeros = quadratic.FindZero();
+
+    Debug.Log("f(1) = " + valueAt1);
+    Debug.Log("Zeros: " + zeros);
+}
+
 }
